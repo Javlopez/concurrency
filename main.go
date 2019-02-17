@@ -6,6 +6,40 @@ import (
 )
 
 func main() {
+	myChan := make(chan string)
+
+	/*
+		go func() {
+			myChan <- "Message!"
+		}()
+	*/
+	<-time.After(time.Second * 1)
+
+	select {
+	case myChan <- "Message":
+		fmt.Println("message sent")
+	default:
+		fmt.Println("no message sent")
+	}
+
+	select {
+	case msg := <-myChan:
+		fmt.Println(msg)
+	default:
+		fmt.Println("No message")
+	}
+
+	<-time.After(time.Second * 3)
+
+	select {
+	case msg := <-myChan:
+		fmt.Println(msg)
+	default:
+		fmt.Println("No message")
+	}
+}
+
+func main2() {
 	theMine := [5]string{"rock", "ore", "ore", "rock", "ore"}
 
 	oreChannel := make(chan string)
