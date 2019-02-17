@@ -6,24 +6,51 @@ import (
 )
 
 func main() {
-	theMine := [5]string{"ore1", "ore2", "ore3"}
-	oreChan := make(chan string, 3)
+	//theMine := [5]string{"ore1", "ore2", "ore3"}
+	//oreChan := make(chan string, 3)
+	bufferedChan := make(chan string, 3)
 
-	//Finder
-	go func(mine [5]string) {
-		for _, item := range mine {
-			oreChan <- item
-		}
-	}(theMine)
-
-	// Ore Breaker
 	go func() {
-		for i := 0; i < 3; i++ {
-			foundOre := <-oreChan
-			fmt.Println("Miner: Received " + foundOre + " from finder")
-		}
+		bufferedChan <- "first"
+		fmt.Println("Sent 1st")
+		bufferedChan <- "second"
+		fmt.Println("Sent 2nd")
+		bufferedChan <- "third"
+		fmt.Println("Sent 3rd")
+		bufferedChan <- "four"
+		fmt.Println("Sent 4th")
 	}()
-	<-time.After(time.Second * 5)
+
+	go func() {
+		firstRead := <-bufferedChan
+		fmt.Println("Receiving..")
+		fmt.Println(firstRead)
+		secondRead := <-bufferedChan
+		fmt.Println(secondRead)
+		thirdRead := <-bufferedChan
+		fmt.Println(thirdRead)
+		fourRead := <-bufferedChan
+		fmt.Println(fourRead)
+	}()
+
+	<-time.After(time.Second * 2)
+	/*
+		//Finder
+		go func(mine [5]string) {
+			for _, item := range mine {
+				oreChan <- item
+			}
+		}(theMine)
+
+		// Ore Breaker
+		go func() {
+			for i := 0; i < 3; i++ {
+				foundOre := <-oreChan
+				fmt.Println("Miner: Received " + foundOre + " from finder")
+			}
+		}()
+		<-time.After(time.Second * 5)
+	*/
 }
 
 /*
