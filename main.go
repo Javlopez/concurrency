@@ -23,9 +23,9 @@ func main() {
 
 	// Ore Breaker
 	go func() {
-		for i := 0; i < 3; i++ {
+		for foundOre := range oreChannel {
 			//read from oreChannel
-			foundOre := <-oreChannel
+			///foundOre := <-oreChannel
 			fmt.Println("From Finder: ", foundOre)
 			//send to minedOreChan
 			minedOreChan <- "minedOre"
@@ -34,9 +34,10 @@ func main() {
 
 	// Smelter
 	go func() {
-		for i := 0; i < 3; i++ {
+		//for i := 0; i < 3; i++ {
+		for minedOre := range minedOreChan {
 			//read from minedOreChan
-			minedOre := <-minedOreChan
+			//minedOre := <-minedOreChan
 			fmt.Println("From Miner: ", minedOre)
 			fmt.Println("From Smelter: Ore is smelted")
 		}
